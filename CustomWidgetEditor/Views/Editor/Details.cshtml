@@ -1,0 +1,56 @@
+﻿@model CustomWidgetEditor.ViewModels.WidgetVm
+
+@{
+  ViewBag.Title = "Details";
+  Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Add Custom Widgets to Database</h2>
+@using ( Html.BeginForm( "Save", "Editor", FormMethod.Post, new { id = "save" } ) )
+{
+  <div class="form-group">
+    @Html.DropDownListFor( model => model.States, new SelectList( Model.States, "Key", "Value" ), "Select a state", new { @class = "form-control" } )
+    @Html.ValidationMessageFor( model => model.States )
+  </div>
+  <div class="form-group">
+    @Html.LabelFor( model => model.ItemTitle, new { @class = "control-label" } )
+    @Html.TextBoxFor( model => model.ItemTitle, new { @class = "form-control" } )
+  </div>
+
+  <div class="form-group">
+    @Html.LabelFor( model => model.ItemDescription, new { @class = "control-label" } )
+    @Html.TextAreaFor( model => model.ItemDescription, new { @class = "form-control", @rows = 1, @style = "style=height:1em; max-width: 70%;" } )
+    @Html.ValidationMessageFor( model => model.ItemDescription )
+  </div>
+  <div class="form-group">
+    @Html.LabelFor( model => model.DefaultThreshold, new { @class = "control-label" } )
+    @Html.EditorFor( model => model.DefaultThreshold, new { htmlAttributes = new { @class = "form-control mr-4", @min = "0", @max = "100", @style = "width: 8%; text-align: center;" } } )
+    @Html.ValidationMessageFor( model => model.DefaultThreshold )
+  </div>
+  <div class="form-group">
+    @Html.LabelFor( model => model.CustomItemDefinition, new { @class = "control-label" } )
+    @Html.TextAreaFor( model => model.CustomItemDefinition, new { @class = "form-control" } )
+    @Html.ValidationMessageFor( model => model.CustomItemDefinition )
+  </div>
+  <div class="form-group">
+    @Html.LabelFor( model => model.FormId, new { @class = "control-label" } )
+    @Html.TextBoxFor( model => model.FormId, new { @class = "form-control" } )
+    @Html.ValidationMessageFor( model => model.FormId )
+  </div>
+
+  @Html.HiddenFor( model => model.Id )
+  @Html.AntiForgeryToken()
+  <button type="submit" class="btn btn-primary">Save</button>
+
+}
+@Scripts.Render( "~/bundles/jqueryval" )
+@section scripts{
+  <script>
+    $('textarea').each(function () {
+      this.setAttribute('style', 'height:' + (this.scrollHeight) + 'px;overflow-y:hidden;');
+    }).on('input', function () {
+      this.style.height = 'auto';
+      this.style.height = (this.scrollHeight) + 'px';
+    });
+  </script>
+}
