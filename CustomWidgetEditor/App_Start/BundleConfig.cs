@@ -23,7 +23,7 @@ namespace CustomWidgetEditor
         "~/Scripts/bootstrap.js" ) );
 
       bundles.Add( new StyleBundle( "~/Content/css" ).Include(
-        "~/Content/bootstrap-litera.css",
+        "~/Content/bootstrap-listera.css",
         "~/Content/bootstrap-theme.css",
         "~/Content/site.css" ) );
     }

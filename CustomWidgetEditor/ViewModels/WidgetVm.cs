@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
+using System.Web.Mvc;
 
 namespace CustomWidgetEditor.ViewModels
 {
   public class WidgetVm
   {
     public int Id { get; set; }
+
     [Required]
     public string ItemTitle { get; set; }
 
@@ -19,9 +21,6 @@ namespace CustomWidgetEditor.ViewModels
     [Required]
     public int DefaultThreshold { get; set; }
 
-    public string CustomItemDefinition { get; set; }
-
-    [Required]
     public string FormId { get; set; }
 
     [Required]

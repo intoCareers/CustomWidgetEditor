@@ -31,7 +31,6 @@ namespace CustomWidgetEditor.Controllers
                       ItemTitle = p.ItemTitle,
                       ItemDescription = p.ItemDescription,
                       DefaultThreshold = p.DefaultThreshold,
-                      CustomItemDefinition = p.CustomItemDefinition,
                       FormId = p.FormID
                     } ).ToList();
       return View( items );
@@ -47,7 +46,6 @@ namespace CustomWidgetEditor.Controllers
         ItemTitle = widget.ItemTitle,
         ItemDescription = widget.ItemDescription,
         DefaultThreshold = widget.DefaultThreshold,
-        CustomItemDefinition = widget.CustomItemDefinition,
         FormId = widget.FormID
       };
       return View( widgetVm );
