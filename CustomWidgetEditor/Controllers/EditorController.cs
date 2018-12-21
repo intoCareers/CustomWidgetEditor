@@ -23,20 +23,25 @@ namespace CustomWidgetEditor.Controllers
     // GET: Editor
     public ActionResult Index()
     {
+      return View();
+    }
+
+    public ActionResult Current(string state)
+    {
       var items = ( from p in _context.PlanLibraryItems
-                    where p.ItemTypeID == "CustomModule"
-                    select new WidgetVm
-                    {
-                      Id = p.PlanLibCode,
-                      ItemTitle = p.ItemTitle,
-                      ItemDescription = p.ItemDescription,
-                      DefaultThreshold = p.DefaultThreshold,
-                      FormId = p.FormID
-                    } ).ToList();
+        where p.ItemTypeID == "CustomModule"
+        select new WidgetVm
+        {
+          Id = p.PlanLibCode,
+          ItemTitle = p.ItemTitle,
+          ItemDescription = p.ItemDescription,
+          DefaultThreshold = p.DefaultThreshold,
+          FormId = p.FormID
+        } ).ToList();
       return View( items );
     }
 
-    public ActionResult Details( int id )
+    public ActionResult AddNew( int id )
     {
       var widget = _context.PlanLibraryItems.FirstOrDefault( m => m.PlanLibCode == id );
       if ( widget == null ) RedirectToAction( "Index" );
@@ -61,7 +66,7 @@ namespace CustomWidgetEditor.Controllers
         {
 
         };
-        return View( "Details", vm );
+        return View( "AddNew", vm );
       }
 
       if ( widgetVm.Id == 0 )

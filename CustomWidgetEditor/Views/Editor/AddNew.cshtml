@@ -27,11 +27,7 @@
     @Html.EditorFor( model => model.DefaultThreshold, new { htmlAttributes = new { @class = "form-control mr-4", @min = "0", @max = "100", @style = "width: 8%; text-align: center;" } } )
     @Html.ValidationMessageFor( model => model.DefaultThreshold )
   </div>
-  <div class="form-group">
-    @Html.LabelFor( model => model.CustomItemDefinition, new { @class = "control-label" } )
-    @Html.TextAreaFor( model => model.CustomItemDefinition, new { @class = "form-control" } )
-    @Html.ValidationMessageFor( model => model.CustomItemDefinition )
-  </div>
+  
   <div class="form-group">
     @Html.LabelFor( model => model.FormId, new { @class = "control-label" } )
     @Html.TextBoxFor( model => model.FormId, new { @class = "form-control" } )

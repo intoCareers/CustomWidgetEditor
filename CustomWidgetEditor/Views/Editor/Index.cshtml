@@ -1,41 +1,124 @@
-﻿@model IEnumerable<CustomWidgetEditor.ViewModels.WidgetVm >
+﻿@using CustomWidgetEditor.Models
+
 
 @{
-  ViewBag.Title = "Index";
+  ViewBag.Title = "Start";
   Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
+<h4>Please choose a state to work with: </h4>
 
-@if (!Model.Any())
+@foreach (var state in StatesDictionary.States)
 {
-  <p>There are no entries.</p>
+  <div class="flex-wrap">
+    @Html.ActionLink(@state.Value, "Current", "Editor", new { state = state.Key }, new { @class = "btn btn-primary" })
+  </div>
 }
-<table id="widgets" class="table table-responsive table-hover">
-  <thead>
-  <tr>
-    <th>Title</th>
-    <th>Description</th>
-    <th>Default Metric</th>
-    <th>Form Id</th>
-  </tr>
-  </thead>
+
+@*<table class="table table-responsive dataTable">
+
   <tbody>
-  @foreach (var widget in Model)
-  {
     <tr>
       <td>
-        @Html.ActionLink(widget.ItemTitle, "Details", "Editor", new { id = widget.Id}, null)
+        @Html.ActionLink("Alaska", "Current", "Editor", new { state = "AK" }, new {@class="btn btn-outline-primary box"})
       </td>
       <td>
-        @widget.ItemDescription
+        @Url.Action("Current", "Editor", new { state = "AZ" })
+
+        <div class="item-container">
+          <p>Arizona</p>
+        </div>
       </td>
       <td>
-        @widget.DefaultThreshold
+        @Url.Action("Current", "Editor", new { state = "IC" })
+        <div class="item-container">
+          <p>Into Careers</p>
+        </div>
       </td>
       <td>
-        @widget.FormId
+        @Url.Action("Current", "Editor", new { state = "ID" })
+        <div class="item-container">
+          <p>Idaho</p>
+        </div>
       </td>
     </tr>
-  }
+    <tr>
+      <td>
+        @Url.Action( "Current", "Editor", new { state = "IL" } )
+        <div class="item-container">
+          <p>Illinois</p>
+        </div>
+      </td>
+      <td>
+        @Url.Action( "Current", "Editor", new { state = "IN" } )
+        <div class="item-container">
+          <p>Indiana</p>
+        </div>
+      </td>
+      <td>
+        @Url.Action( "Current", "Editor", new { state = "MA" } )
+        <div class="item-container">
+          <p>Massachusetts</p>
+        </div>
+      </td>
+      <td>
+        @Url.Action( "Current", "Editor", new { state = "MN" } )
+        <div class="item-container">
+          <p>Minnesota</p>
+        </div>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        @Url.Action( "Current", "Editor", new { state = "MO" } )
+        <div class="item-container">
+          <p>Missouri</p>
+        </div>
+      </td>
+      <td>
+        @Url.Action( "Current", "Editor", new { state = "MT" } )
+        <div class="item-container">
+          <p>Montana</p>
+        </div>
+      </td>
+      <td>
+        @Url.Action( "Current", "Editor", new { state = "NE" } )
+        <div class="item-container">
+          <p>Nebraska</p>
+        </div>
+      </td>
+      <td>
+        @Url.Action( "Current", "Editor", new { state = "NJ" } )
+        <div class="item-container">
+          <p>New Jersey</p>
+        </div>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        @Url.Action( "Current", "Editor", new { state = "NV" } )
+        <div class="item-container">
+          <p>Nevada</p>
+        </div>
+      </td>
+      <td>
+        @Url.Action("Current", "Editor", new { state = "OH" })
+        <div class="item-container">
+          <p>Ohio</p>
+        </div>
+      </td>
+      <td>
+        @Url.Action("Current", "Editor", new { state = "OK" })
+        <div class="item-container">
+          <p>Oklahoma</p>
+        </div>
+      </td>
+      <td>
+        @Url.Action("Current", "Editor", new { state = "SC" })
+        <div class="item-container">
+          <p>South Carolina</p>
+        </div>
+      </td>
+    </tr>
   </tbody>
-</table>
+</table>*@

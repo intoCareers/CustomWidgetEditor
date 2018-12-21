@@ -21,3 +21,9 @@ input,
 select {
     max-width: 280px;
 }
+
+.btn > .box {
+  height: 100px;
+  width: 100px;
+
+}

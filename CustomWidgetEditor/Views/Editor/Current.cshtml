@@ -1,0 +1,41 @@
+﻿@model IEnumerable<CustomWidgetEditor.ViewModels.WidgetVm>
+
+@{
+  ViewBag.Title = "Index";
+  Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<h2>Current list of forms</h2>
+
+@if ( !Model.Any() )
+{
+  <p>There are no entries.</p>
+}
+<table id="widgets" class="table table-responsive table-hover">
+  <thead>
+    <tr>
+      <th>Title</th>
+      <th>Description</th>
+      <th>Default Metric</th>
+      <th>Form Id</th>
+    </tr>
+  </thead>
+  <tbody>
+    @foreach ( var widget in Model )
+    {
+      <tr>
+        <td>
+          @Html.ActionLink( widget.ItemTitle, "Details", "Editor", new { id = widget.Id }, null )
+        </td>
+        <td>
+          @widget.ItemDescription
+        </td>
+        <td>
+          @widget.DefaultThreshold
+        </td>
+        <td>
+          @widget.FormId
+        </td>
+      </tr>
+    }
+  </tbody>
+</table>

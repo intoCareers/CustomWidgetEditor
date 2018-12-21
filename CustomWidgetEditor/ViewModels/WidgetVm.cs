@@ -22,26 +22,6 @@ namespace CustomWidgetEditor.ViewModels
     public int DefaultThreshold { get; set; }
 
     public string FormId { get; set; }
-
-    [Required]
-    public readonly Dictionary<string, string> States = new Dictionary<string, string>()
-    {
-      { "AK", "Alaska" },
-      { "AZ", "Arizona" },
-      { "IC", "IntoCareers" },
-      { "ID", "Idaho" },
-      { "IL", "Illinois" },
-      { "IN", "Indianna" },
-      { "MA", "Massachusetts" },
-      { "MN", "Minnisota" },
-      { "MO", "Missouri" },
-      { "MT", "Montanna" },
-      { "NE", "Nebraska" },
-      { "NJ", "New Jersey" },
-      { "NV", "Nevada" },
-      { "OH", "Ohio" },
-      { "OK", "Oklahoma" },
-      { "SC", "South Carolina" }
-    };
+    
   }
 }
