@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Web.Configuration;
 using System.Web.Mvc;
 using CustomWidgetEditor.Models;
@@ -8,18 +9,6 @@ namespace CustomWidgetEditor.Controllers
 {
   public class EditorController : Controller
   {
-    private readonly LibraryItemsContext _context;
-
-    public EditorController()
-    {
-      _context = new LibraryItemsContext();
-    }
-
-    protected override void Dispose( bool disposing )
-    {
-      _context.Dispose();
-    }
-
     // GET: Editor
     public ActionResult Index()
     {
@@ -28,17 +17,13 @@ namespace CustomWidgetEditor.Controllers
 
     public ActionResult Current(string state)
     {
-      var items = ( from p in _context.PlanLibraryItems
-        where p.ItemTypeID == "CustomModule"
-        select new WidgetVm
-        {
-          Id = p.PlanLibCode,
-          ItemTitle = p.ItemTitle,
-          ItemDescription = p.ItemDescription,
-          DefaultThreshold = p.DefaultThreshold,
-          FormId = p.FormID
-        } ).ToList();
-      return View( items );
+      if (Request.Url != null)
+      {
+        var urlTest = Request.Url.AbsoluteUri;
+        var items = ItemsManager.GetItems(state, urlTest);
+      
+        return View( items );
+      }
     }
 
     public ActionResult AddNew( int id )
@@ -75,11 +60,11 @@ namespace CustomWidgetEditor.Controllers
       }
       else
       {
-        var widgetInDb = _context.PlanLibraryItems.Single( m => m.PlanLibCode == widgetVm.Id );
+        //var widgetInDb = _context.PlanLibraryItems.Single( m => m.PlanLibCode == widgetVm.Id );
 
       }
 
-      _context.SaveChanges();
+      //_context.SaveChanges();
 
       return RedirectToAction( "Index", "Editor" );
     }

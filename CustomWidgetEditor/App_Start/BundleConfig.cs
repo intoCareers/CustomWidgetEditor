@@ -12,7 +12,8 @@ namespace CustomWidgetEditor
         "~/Scripts/bootstrap.js",
         "~/Scripts/DataTables/jquery.dataTables.js",
         "~/Scripts/DataTables/dataTables.bootstrap.js",
-        "~/Scripts/bootbox.js" ) );
+        "~/Scripts/bootbox.js",
+        "~/Scripts/umd/popper.js" ) );
 
       bundles.Add( new ScriptBundle( "~/bundles/jquery-ui" ).Include(
         "~/Scripts/jquery-ui-{version}.js" ) );

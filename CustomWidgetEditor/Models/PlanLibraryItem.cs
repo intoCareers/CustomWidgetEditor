@@ -8,6 +8,12 @@ namespace CustomWidgetEditor.Models
 
     public partial class PlanLibraryItem
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public PlanLibraryItem()
+        {
+            PlanLibraryItemCustomItemScopes = new HashSet<PlanLibraryItemCustomItemScope>();
+        }
+
         [Key]
         public int PlanLibCode { get; set; }
 
@@ -41,5 +47,10 @@ namespace CustomWidgetEditor.Models
 
         [StringLength(50)]
         public string FormID { get; set; }
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<PlanLibraryItemCustomItemScope> PlanLibraryItemCustomItemScopes { get; set; }
+
+        public virtual PlanLibraryItemsScope PlanLibraryItemsScope { get; set; }
     }
 }
