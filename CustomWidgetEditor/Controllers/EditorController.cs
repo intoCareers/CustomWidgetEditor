@@ -1,9 +1,8 @@
-﻿using System;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Web.Configuration;
-using System.Web.Mvc;
 using CustomWidgetEditor.Models;
 using CustomWidgetEditor.ViewModels;
+using System.Web.Mvc;
 
 namespace CustomWidgetEditor.Controllers
 {
@@ -15,29 +14,36 @@ namespace CustomWidgetEditor.Controllers
       return View();
     }
 
-    public ActionResult Current(string state)
+    public ActionResult Current( string stateAbbr )
     {
-      if (Request.Url != null)
+      if (Request.Url == null) return View();
+      var urlTest = Request.Url.AbsoluteUri;
+      var items = ItemsManager.GetItems(stateAbbr, urlTest);
+      var widgetVm = new List<WidgetVm>();
+      if (items != null)
       {
-        var urlTest = Request.Url.AbsoluteUri;
-        var items = ItemsManager.GetItems(state, urlTest);
-      
-        return View( items );
+        widgetVm = items.Select(i => new WidgetVm
+        {
+          PlanLibCode = i.PlanLibCode,
+          ItemTitle = i.ItemTitle,
+          ItemDescription = i.ItemDescription,
+          DefaultThreshold = i.DefaultThreshold,
+          FormId = i.FormID
+        }).ToList();
       }
+      ViewBag.State = StatesDictionary.States.FirstOrDefault(s => s.Key == stateAbbr).Value;
+      return View( widgetVm );
+
     }
 
-    public ActionResult AddNew( int id )
+    public ActionResult Edit(int id)
     {
-      var widget = _context.PlanLibraryItems.FirstOrDefault( m => m.PlanLibCode == id );
-      if ( widget == null ) RedirectToAction( "Index" );
-      var widgetVm = new WidgetVm
-      {
-        Id = widget.PlanLibCode,
-        ItemTitle = widget.ItemTitle,
-        ItemDescription = widget.ItemDescription,
-        DefaultThreshold = widget.DefaultThreshold,
-        FormId = widget.FormID
-      };
+      return View();
+    }
+
+    public ActionResult AddNew( )
+    {
+      var widgetVm = new WidgetVm();
       return View( widgetVm );
     }
 
@@ -54,7 +60,7 @@ namespace CustomWidgetEditor.Controllers
         return View( "AddNew", vm );
       }
 
-      if ( widgetVm.Id == 0 )
+      if ( widgetVm.PlanLibCode == 0 )
       {
 
       }

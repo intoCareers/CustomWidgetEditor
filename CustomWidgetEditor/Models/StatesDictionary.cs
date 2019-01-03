@@ -1,12 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace CustomWidgetEditor.Models
 {
   public static class StatesDictionary
   {
+    [Required]
     public static Dictionary<string, string> States = new Dictionary<string, string>()
     {
       { "AK", "Alaska" },

@@ -4,27 +4,29 @@
   ViewBag.Title = "Index";
   Layout = "~/Views/Shared/_Layout.cshtml";
 }
-<h2>Current list of forms</h2>
+<h2>Current list of forms - @ViewBag.State</h2>
 
 @if ( !Model.Any() )
 {
   <p>There are no entries.</p>
 }
-<table id="widgets" class="table table-responsive table-hover">
-  <thead>
+else
+{
+  <table id="widgets" class="table table-responsive table-hover">
+    <thead>
     <tr>
       <th>Title</th>
       <th>Description</th>
       <th>Default Metric</th>
       <th>Form Id</th>
     </tr>
-  </thead>
-  <tbody>
+    </thead>
+    <tbody>
     @foreach ( var widget in Model )
     {
       <tr>
         <td>
-          @Html.ActionLink( widget.ItemTitle, "Details", "Editor", new { id = widget.Id }, null )
+          @Html.ActionLink( widget.ItemTitle, "Details", "Editor", new { id = widget.PlanLibCode, state = ViewBag.State }, null )
         </td>
         <td>
           @widget.ItemDescription
@@ -37,5 +39,6 @@
         </td>
       </tr>
     }
-  </tbody>
-</table>
+    </tbody>
+  </table>
+}

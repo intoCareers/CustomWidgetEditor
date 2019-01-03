@@ -6,7 +6,10 @@
   <title>@ViewBag.Title - My ASP.NET Application</title>
   @Styles.Render( "~/Content/css" )
   @Scripts.Render( "~/bundles/modernizr" )
+  @Scripts.Render( "~/bundles/jquery" )
+  @Scripts.Render( "~/bundles/jquery-ui" )
 
+  @RenderSection( "scripts", required: false )
 </head>
 <body>
   @Html.Partial( "_TopNavigation" )
@@ -18,9 +21,6 @@
     </footer>
   </div>
 
-  @Scripts.Render( "~/bundles/jquery" )
-  @Scripts.Render( "~/bundles/jquery-ui" )
-
-  @RenderSection( "scripts", required: false )
+  
 </body>
 </html>

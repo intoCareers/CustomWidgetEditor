@@ -1,12 +1,9 @@
 namespace CustomWidgetEditor.Models
 {
-    using System;
-    using System.Collections.Generic;
-    using System.ComponentModel.DataAnnotations;
-    using System.ComponentModel.DataAnnotations.Schema;
-    using System.Data.Entity.Spatial;
+  using System.Collections.Generic;
+  using System.ComponentModel.DataAnnotations;
 
-    public partial class PlanLibraryItem
+  public partial class PlanLibraryItem
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public PlanLibraryItem()
