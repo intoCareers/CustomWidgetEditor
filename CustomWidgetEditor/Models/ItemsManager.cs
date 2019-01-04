@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using Microsoft.Ajax.Utilities;
+using WebGrease.Css.Ast.Selectors;
 
 namespace CustomWidgetEditor.Models
 {
@@ -21,10 +22,22 @@ namespace CustomWidgetEditor.Models
       {
         using ( var context = new LibraryItemsContext( state, urlTest ) )
         {
-          items = ( from p in context.PlanLibraryItems
-                    join s in context.PlanLibraryItemCustomItemScopes on p.PlanLibCode equals s.PlanLibCode
-                    where p.ItemTypeID == _itemTypeId
-                    select p ).ToList();
+          var operatorId = context.Operators.FirstOrDefault(o=>o.StateAbbr == state).OperatorID;
+          if (urlTest.Contains("localhost") || urlTest.Contains("test"))
+          {
+            items = ( from p in context.PlanLibraryItems
+              join s in context.PlanLibraryItemCustomItemScopes on p.PlanLibCode equals s.PlanLibCode
+              join o in context.Operators on s.ScopeId equals o.OperatorID
+              where p.ItemTypeID == _itemTypeId && o.OperatorID == operatorId
+              select p ).ToList();
+          }
+          else
+          {
+            items = ( from p in context.PlanLibraryItems
+              join s in context.PlanLibraryItemCustomItemScopes on p.PlanLibCode equals s.PlanLibCode
+              where p.ItemTypeID == _itemTypeId
+              select p ).ToList();
+          }
         }
       }
       catch ( Exception ex )

@@ -17,9 +17,19 @@ else
 @using ( Html.BeginForm( "Save", "Editor", FormMethod.Post, new { id = "save" } ) )
 {
   <div class="form-group">
+    if (Model.PlanLibCode == 0)
+    {
+
     @Html.DropDownListFor( model => model.State, new SelectList( StatesDictionary.States, "Key", "Value" ), "Select a state", new { @class = "form-control text-center" } )
     @Html.ValidationMessageFor( model => model.State )
+    }
+    else
+    {
+    @Html.Display
+      @Html.Display(ViewBag.State, new { @class="form-control"} )
+    }
   </div>
+
   <div class="form-group">
     @Html.LabelFor( model => model.ItemTitle, new { @class = "control-label" } )
     @Html.TextBoxFor( model => model.ItemTitle, new { @class = "form-control" } )
@@ -45,6 +55,7 @@ else
   @Html.HiddenFor( model => model.PlanLibCode )
   @Html.AntiForgeryToken()
   <button type="submit" class="btn btn-primary">Save</button>
+  @Html.ActionLink("Cancel", "Current", "Editor", new {@class="btn btn-outline-danger", @state=ViewBag.StateAbbr})
 }
 
 @Scripts.Render( "~/bundles/jqueryval" )

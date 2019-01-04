@@ -4,8 +4,10 @@
   ViewBag.Title = "Index";
   Layout = "~/Views/Shared/_Layout.cshtml";
 }
-<h2>Current list of forms - @ViewBag.State</h2>
-
+<div class="container-fluid">
+  <h2>Current list of forms - @ViewBag.State</h2>
+  @Html.ActionLink("Add A New Entry", "AddNew", "Editor", new {@class = "btn btn-outline-info float-right"})
+</div>
 @if ( !Model.Any() )
 {
   <p>There are no entries.</p>
@@ -26,7 +28,7 @@ else
     {
       <tr>
         <td>
-          @Html.ActionLink( widget.ItemTitle, "Details", "Editor", new { id = widget.PlanLibCode, state = ViewBag.State }, null )
+          @Html.ActionLink( widget.ItemTitle, "Edit", "Editor", new { id = widget.PlanLibCode, state = ViewBag.StateAbbr }, null )
         </td>
         <td>
           @widget.ItemDescription

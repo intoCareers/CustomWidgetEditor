@@ -14,11 +14,12 @@ namespace CustomWidgetEditor.Controllers
       return View();
     }
 
-    public ActionResult Current( string stateAbbr )
+    [HttpGet]
+    public ActionResult Current( string state )
     {
       if (Request.Url == null) return View();
       var urlTest = Request.Url.AbsoluteUri;
-      var items = ItemsManager.GetItems(stateAbbr, urlTest);
+      var items = ItemsManager.GetItems(state, urlTest);
       var widgetVm = new List<WidgetVm>();
       if (items != null)
       {
@@ -31,14 +32,28 @@ namespace CustomWidgetEditor.Controllers
           FormId = i.FormID
         }).ToList();
       }
-      ViewBag.State = StatesDictionary.States.FirstOrDefault(s => s.Key == stateAbbr).Value;
+      var stateDictionary = StatesDictionary.States.FirstOrDefault(s => s.Key == state);
+      ViewBag.State = stateDictionary.Key;
+      ViewBag.StateAbbr = stateDictionary.Value;
       return View( widgetVm );
 
     }
 
-    public ActionResult Edit(int id)
+    public ActionResult Edit(int id, string state)
     {
-      return View();
+      if (Request.Url == null) return View("Current");
+      var urlTest = Request.Url.AbsoluteUri;
+      var item = ItemsManager.GetItem(state, urlTest, id);
+      var widgetVm = new WidgetVm
+      {
+        PlanLibCode = item.PlanLibCode,
+        ItemTitle = item.ItemTitle,
+        ItemDescription = item.ItemDescription,
+        DefaultThreshold = item.DefaultThreshold,
+        FormId = item.FormID,
+        State = state
+      };
+      return View("AddNew", widgetVm);
     }
 
     public ActionResult AddNew( )
