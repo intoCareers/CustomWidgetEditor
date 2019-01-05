@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel;
+using CustomWidgetEditor.Models;
 
 namespace CustomWidgetEditor.ViewModels
 {
@@ -6,7 +7,6 @@ namespace CustomWidgetEditor.ViewModels
 
   public class WidgetVm
   {
-    
     public int PlanLibCode { get; set; }
 
     [Required]
@@ -19,12 +19,20 @@ namespace CustomWidgetEditor.ViewModels
 
     [Range( 0, 100 )]
     [Required]
-    [DisplayName("")]
+    [DisplayName("Default Metric")]
     public int DefaultThreshold { get; set; }
-
+    
+    [Required]
+    [DisplayName("Form Id")]
     public string FormId { get; set; }
 
     [Required]
+    [DisplayName("State")]
     public string State { get; set; }
+
+    [MaxLength(2)]
+    [MinLength(2)]
+    [DisplayName("State abbreviation")]
+    public string StateAbbr { get; set; }
   }
 }

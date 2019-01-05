@@ -92,6 +92,7 @@ namespace CustomWidgetEditor.Models
           }
 
           context.SaveChanges();
+          SaveItemScopeTable()
         }
       }
       catch (Exception ex)

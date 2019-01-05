@@ -6,7 +6,7 @@
 }
 <div class="container-fluid">
   <h2>Current list of forms - @ViewBag.State</h2>
-  @Html.ActionLink("Add A New Entry", "AddNew", "Editor", new {@class = "btn btn-outline-info float-right"})
+  @Html.ActionLink( "Add A New Entry", "AddNew", "Editor", new { stateAbbr = ViewBag.StateAbbr }, new { @class = "btn btn-outline-info float-right" } )
 </div>
 @if ( !Model.Any() )
 {
@@ -16,31 +16,31 @@ else
 {
   <table id="widgets" class="table table-responsive table-hover">
     <thead>
-    <tr>
-      <th>Title</th>
-      <th>Description</th>
-      <th>Default Metric</th>
-      <th>Form Id</th>
-    </tr>
+      <tr>
+        <th>Title</th>
+        <th>Description</th>
+        <th>Default Metric</th>
+        <th>Form Id</th>
+      </tr>
     </thead>
     <tbody>
-    @foreach ( var widget in Model )
-    {
-      <tr>
-        <td>
-          @Html.ActionLink( widget.ItemTitle, "Edit", "Editor", new { id = widget.PlanLibCode, state = ViewBag.StateAbbr }, null )
-        </td>
-        <td>
-          @widget.ItemDescription
-        </td>
-        <td>
-          @widget.DefaultThreshold
-        </td>
-        <td>
-          @widget.FormId
-        </td>
-      </tr>
-    }
+      @foreach ( var widget in Model )
+      {
+        <tr>
+          <td>
+            @Html.ActionLink( widget.ItemTitle, "Edit", "Editor", new { id = widget.PlanLibCode, stateAbbr = widget.StateAbbr }, null )
+          </td>
+          <td>
+            @widget.ItemDescription
+          </td>
+          <td>
+            @widget.DefaultThreshold
+          </td>
+          <td>
+            @widget.FormId
+          </td>
+        </tr>
+      }
     </tbody>
   </table>
 }

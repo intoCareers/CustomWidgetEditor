@@ -5,7 +5,6 @@ namespace CustomWidgetEditor.Models
 {
   public static class StatesDictionary
   {
-    [Required]
     public static Dictionary<string, string> States = new Dictionary<string, string>()
     {
       { "AK", "Alaska" },

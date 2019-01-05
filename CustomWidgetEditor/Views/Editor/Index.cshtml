@@ -10,7 +10,7 @@
   @foreach ( var state in StatesDictionary.States )
   {
 
-    @Html.ActionLink( @state.Key, "Current", "Editor", new { state = state.Key }, 
-      new { @class = "btn btn-primary box m-4", @title = state.Value } )
+    @Html.ActionLink( @state.Key, "Current", "Editor", new { stateAbbr = state.Key }, 
+      new { @class = "btn btn-primary box m-4", title = state.Value } )
   }
 </div>

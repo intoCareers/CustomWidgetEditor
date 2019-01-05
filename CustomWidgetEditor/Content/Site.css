@@ -28,3 +28,7 @@ a.box {
   font-size: 2.5em;
   padding-top: 22px;
 }
+
+.field-validation-valid {
+  display: none;
+}
