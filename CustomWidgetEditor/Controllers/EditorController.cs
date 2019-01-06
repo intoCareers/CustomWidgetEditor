@@ -60,10 +60,13 @@ namespace CustomWidgetEditor.Controllers
 
     public ActionResult AddNew( string stateAbbr = null )
     {
+      if ( Request.Url == null ) return View( "Current" );
+      var urlTest = Request.Url.AbsoluteUri;
       var widgetVm = new WidgetVm();
       if ( stateAbbr == null ) return View( widgetVm );
       widgetVm.State = StatesDictionary.States.FirstOrDefault( s => s.Key == stateAbbr ).Value;
       widgetVm.StateAbbr = stateAbbr;
+      widgetVm.Sites = ItemsManager.GetSites(stateAbbr, urlTest);
       return View( widgetVm );
     }
 

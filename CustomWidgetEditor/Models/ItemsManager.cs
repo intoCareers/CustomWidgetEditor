@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using System.Web.UI.WebControls;
+using CustomWidgetEditor.Helpers;
 using Microsoft.Ajax.Utilities;
 using WebGrease.Css.Ast.Selectors;
 
@@ -15,14 +17,14 @@ namespace CustomWidgetEditor.Models
     private const string _metricValueNote = "Custom";
 
     //Get all items for specific state
-    public static List<PlanLibraryItem> GetItems( string state, string urlTest )
+    public static List<PlanLibraryItem> GetItems( string stateAbbr, string urlTest )
     {
       var items = new List<PlanLibraryItem>();
       try
       {
-        using ( var context = new LibraryItemsContext( state, urlTest ) )
+        using ( var context = new LibraryItemsContext( stateAbbr, urlTest ) )
         {
-          var operatorId = context.Operators.FirstOrDefault(o=>o.StateAbbr == state).OperatorID;
+          var operatorId = context.Operators.FirstOrDefault(o=>o.StateAbbr == stateAbbr).OperatorID;
           if (urlTest.Contains("localhost") || urlTest.Contains("test"))
           {
             items = ( from p in context.PlanLibraryItems
@@ -49,12 +51,12 @@ namespace CustomWidgetEditor.Models
     }
 
     //Get single PlanLibraryItem
-    public static PlanLibraryItem GetItem(string state, string urlTest, int id)
+    public static PlanLibraryItem GetItem(string stateAbbr, string urlTest, int id)
     {
       var item = new PlanLibraryItem();
       try
       {
-        using (var context = new LibraryItemsContext(state, urlTest))
+        using (var context = new LibraryItemsContext(stateAbbr, urlTest))
         {
           item = context.PlanLibraryItems.FirstOrDefault(i => i.PlanLibCode == id);
         }
@@ -66,13 +68,60 @@ namespace CustomWidgetEditor.Models
 
       return item;
     }
+    
+    //get sites for selected State
+    public static List<CheckBoxListItem> GetSites(string stateAbbr, string urlTest)
+    {
+      var sites = new List<CheckBoxListItem>();
+      try
+      {
+        using (var context = new LibraryItemsContext(stateAbbr, urlTest))
+        {
+          var operatorId = context.Operators.FirstOrDefault(o => o.StateAbbr == stateAbbr).OperatorID;
+          var results = context.Sites.Where(s => s.OperatorID == operatorId);
+          foreach (var result in results)
+          {
+            sites.Add(new CheckBoxListItem
+            {
+              Id = result.SiteID,
+              Display = result.SiteName,
+              IsChecked = false
+            });
+          }
+        }
+      }
+      catch (Exception ex)
+      {
+        throw ex;
+      }
+      return sites;
+    }
+
+    //get single site information
+    public static Site GetSite(string stateAbbr, string urlTest, int id)
+    {
+      var site = new Site();
+      try
+      {
+        using (var context = new LibraryItemsContext(stateAbbr, urlTest))
+        {
+          site = context.Sites.FirstOrDefault(s => s.SiteID == id);
+        }
+      }
+      catch (Exception ex)
+      {
+        throw ex;
+      }
+
+      return site;
+    }
 
     //save single PlanLibraryItem
-    public static void Save(PlanLibraryItem libraryItem, string state, string urlTest)
+    public static void Save(PlanLibraryItem libraryItem, string stateAbbr, string urlTest)
     {
       try
       {
-        using (var context = new LibraryItemsContext(state, urlTest))
+        using (var context = new LibraryItemsContext(stateAbbr, urlTest))
         {
           if (libraryItem.PlanLibCode == 0)
           {
@@ -92,7 +141,7 @@ namespace CustomWidgetEditor.Models
           }
 
           context.SaveChanges();
-          SaveItemScopeTable()
+          //SaveItemScopeTable()
         }
       }
       catch (Exception ex)
