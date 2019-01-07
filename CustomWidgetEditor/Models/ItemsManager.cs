@@ -1,11 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
-using System.Web.UI.WebControls;
-using CustomWidgetEditor.Helpers;
-using Microsoft.Ajax.Utilities;
-using WebGrease.Css.Ast.Selectors;
 
 namespace CustomWidgetEditor.Models
 {
@@ -25,20 +20,20 @@ namespace CustomWidgetEditor.Models
         using ( var context = new LibraryItemsContext( stateAbbr, urlTest ) )
         {
           var operatorId = context.Operators.FirstOrDefault(o=>o.StateAbbr == stateAbbr).OperatorID;
-          if (urlTest.Contains("localhost") || urlTest.Contains("test"))
+          if ( urlTest.Contains( "localhost" ) || urlTest.Contains( "test" ) )
           {
             items = ( from p in context.PlanLibraryItems
-              join s in context.PlanLibraryItemCustomItemScopes on p.PlanLibCode equals s.PlanLibCode
-              join o in context.Operators on s.ScopeId equals o.OperatorID
-              where p.ItemTypeID == _itemTypeId && o.OperatorID == operatorId
-              select p ).ToList();
+                      join s in context.PlanLibraryItemCustomItemScopes on p.PlanLibCode equals s.PlanLibCode
+                      join o in context.Operators on s.ScopeId equals o.OperatorID
+                      where p.ItemTypeID == _itemTypeId && o.OperatorID == operatorId
+                      select p ).ToList();
           }
           else
           {
             items = ( from p in context.PlanLibraryItems
-              join s in context.PlanLibraryItemCustomItemScopes on p.PlanLibCode equals s.PlanLibCode
-              where p.ItemTypeID == _itemTypeId
-              select p ).ToList();
+                      join s in context.PlanLibraryItemCustomItemScopes on p.PlanLibCode equals s.PlanLibCode
+                      where p.ItemTypeID == _itemTypeId
+                      select p ).ToList();
           }
         }
       }
@@ -51,46 +46,37 @@ namespace CustomWidgetEditor.Models
     }
 
     //Get single PlanLibraryItem
-    public static PlanLibraryItem GetItem(string stateAbbr, string urlTest, int id)
+    public static PlanLibraryItem GetItem( string stateAbbr, string urlTest, int id )
     {
       var item = new PlanLibraryItem();
       try
       {
-        using (var context = new LibraryItemsContext(stateAbbr, urlTest))
+        using ( var context = new LibraryItemsContext( stateAbbr, urlTest ) )
         {
-          item = context.PlanLibraryItems.FirstOrDefault(i => i.PlanLibCode == id);
+          item = context.PlanLibraryItems.FirstOrDefault( i => i.PlanLibCode == id );
         }
       }
-      catch (Exception ex)
+      catch ( Exception ex )
       {
         throw ex;
       }
 
       return item;
     }
-    
+
     //get sites for selected State
-    public static List<CheckBoxListItem> GetSites(string stateAbbr, string urlTest)
+    public static Dictionary<int, string> GetSites( string stateAbbr, string urlTest )
     {
-      var sites = new List<CheckBoxListItem>();
+      var sites = new Dictionary<int, string>();
       try
       {
-        using (var context = new LibraryItemsContext(stateAbbr, urlTest))
+        using ( var context = new LibraryItemsContext( stateAbbr, urlTest ) )
         {
           var operatorId = context.Operators.FirstOrDefault(o => o.StateAbbr == stateAbbr).OperatorID;
-          var results = context.Sites.Where(s => s.OperatorID == operatorId);
-          foreach (var result in results)
-          {
-            sites.Add(new CheckBoxListItem
-            {
-              Id = result.SiteID,
-              Display = result.SiteName,
-              IsChecked = false
-            });
-          }
+          sites = context.Sites.Where( s => s.OperatorID == operatorId ).ToDictionary( x => x.SiteID, r => r.SiteName );
         }
       }
-      catch (Exception ex)
+      catch ( Exception ex )
       {
         throw ex;
       }
@@ -98,17 +84,17 @@ namespace CustomWidgetEditor.Models
     }
 
     //get single site information
-    public static Site GetSite(string stateAbbr, string urlTest, int id)
+    public static Site GetSite( string stateAbbr, string urlTest, int id )
     {
       var site = new Site();
       try
       {
-        using (var context = new LibraryItemsContext(stateAbbr, urlTest))
+        using ( var context = new LibraryItemsContext( stateAbbr, urlTest ) )
         {
-          site = context.Sites.FirstOrDefault(s => s.SiteID == id);
+          site = context.Sites.FirstOrDefault( s => s.SiteID == id );
         }
       }
-      catch (Exception ex)
+      catch ( Exception ex )
       {
         throw ex;
       }
@@ -117,36 +103,40 @@ namespace CustomWidgetEditor.Models
     }
 
     //save single PlanLibraryItem
-    public static void Save(PlanLibraryItem libraryItem, string stateAbbr, string urlTest)
+    public static void Save( PlanLibraryItem libraryItem, string stateAbbr, string urlTest, int? siteId = null )
     {
       try
       {
-        using (var context = new LibraryItemsContext(stateAbbr, urlTest))
+        using ( var context = new LibraryItemsContext( stateAbbr, urlTest ) )
         {
-          if (libraryItem.PlanLibCode == 0)
-          {
-            libraryItem.ItemType = _itemType;
-            libraryItem.ItemTypeID = _itemTypeId;
-            libraryItem.PlanLibraryItemScopeID = _itemScopeId;
-            libraryItem.MetricValueNote = _metricValueNote;
-            context.PlanLibraryItems.Add(libraryItem);
-          }
-          else
-          {
-            var itemInDb = context.PlanLibraryItems.FirstOrDefault(i => i.PlanLibCode == libraryItem.PlanLibCode);
-            itemInDb.ItemTitle = libraryItem.ItemTitle;
-            itemInDb.ItemDescription = libraryItem.ItemDescription;
-            itemInDb.DefaultThreshold = libraryItem.DefaultThreshold;
-            itemInDb.FormID = libraryItem.FormID;
-          }
+          libraryItem.ItemType = _itemType;
+          libraryItem.ItemTypeID = _itemTypeId;
+          libraryItem.PlanLibraryItemScopeID = _itemScopeId;
+          libraryItem.MetricValueNote = _metricValueNote;
+          context.PlanLibraryItems.Add( libraryItem );
 
           context.SaveChanges();
-          //SaveItemScopeTable()
+          var scopeId = siteId ?? context.Operators.FirstOrDefault(o => o.StateAbbr == stateAbbr).OperatorID;
+          SaveCustomItemScope( libraryItem.PlanLibCode, scopeId, context );
         }
       }
-      catch (Exception ex)
+      catch ( Exception ex )
       {
         throw ex;
+      }
+    }
+
+    //save entry to PlanLibraryItemsCustomItemScope
+    public static void SaveCustomItemScope( int itemId, int scopeId, LibraryItemsContext context )
+    {
+      using ( context )
+      {
+        var customItemScopeEntry = new PlanLibraryItemCustomItemScope
+        {
+          PlanLibCode = itemId,
+          CustomItemScopeId = scopeId
+        };
+        context.SaveChanges();
       }
     }
   }

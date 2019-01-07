@@ -146,7 +146,6 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Helpers\CheckBoxListItem.cs" />
     <Compile Include="Models\ItemsManager.cs" />
     <Compile Include="Models\LibraryItemsContext.cs" />
     <Compile Include="Models\Operator.cs" />
@@ -460,7 +459,6 @@
     <Content Include="Scripts\popper.js.map" />
     <Content Include="Scripts\popper-utils.min.js.map" />
     <Content Include="Scripts\popper-utils.js.map" />
-    <Content Include="Views\Shared\EditorTemplates\CheckBoxListItem.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

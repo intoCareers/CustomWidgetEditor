@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel;
-using CustomWidgetEditor.Helpers;
 using CustomWidgetEditor.Models;
 
 namespace CustomWidgetEditor.ViewModels
@@ -37,14 +36,11 @@ namespace CustomWidgetEditor.ViewModels
     [DisplayName("State abbreviation")]
     public string StateAbbr { get; set; }
 
-    [DisplayName("Site")]
+    [DisplayName("Site Name")]
     public int SiteId { get; set; }
 
-    public List<CheckBoxListItem> Sites { get; set; }
+    public string SiteName { get; set; }
 
-    public WidgetVm()
-    {
-      Sites = new List<CheckBoxListItem>();
-    }
+    public Dictionary<int, string> Sites { get; set; }
   }
 }

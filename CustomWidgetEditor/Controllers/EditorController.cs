@@ -6,6 +6,7 @@ using System.Web.Mvc;
 
 namespace CustomWidgetEditor.Controllers
 {
+  [RoutePrefix("Editor")]
   public class EditorController : Controller
   {
     // GET: Editor
@@ -15,8 +16,10 @@ namespace CustomWidgetEditor.Controllers
     }
 
     [HttpGet]
+    [Route("Editor/Current/{stateAbbr}")]
     public ActionResult Current( string stateAbbr )
     {
+      if ( string.IsNullOrEmpty( stateAbbr ) ) return RedirectToAction( "Index" );
       if ( Request.Url == null ) return View();
       var urlTest = Request.Url.AbsoluteUri;
       var items = ItemsManager.GetItems( stateAbbr, urlTest );
@@ -31,7 +34,7 @@ namespace CustomWidgetEditor.Controllers
           DefaultThreshold = i.DefaultThreshold,
           FormId = i.FormID,
           State = StatesDictionary.States.FirstOrDefault( s => s.Key == stateAbbr ).Value,
-          StateAbbr = stateAbbr
+          StateAbbr = stateAbbr,
         } ).ToList();
       }
 
@@ -40,8 +43,10 @@ namespace CustomWidgetEditor.Controllers
       return View( widgetVm );
     }
 
+    [Route("Editor/Edit/{id}/{stateAbbr}")]
     public ActionResult Edit( int id, string stateAbbr )
     {
+      if ( string.IsNullOrEmpty( stateAbbr ) ) return RedirectToAction( "Index" );
       if ( Request.Url == null ) return View( "Current" );
       var urlTest = Request.Url.AbsoluteUri;
       var item = ItemsManager.GetItem( stateAbbr, urlTest, id );
@@ -58,15 +63,18 @@ namespace CustomWidgetEditor.Controllers
       return View( "AddNew", widgetVm );
     }
 
-    public ActionResult AddNew( string stateAbbr = null )
+    //[Route("Editor/AddNew/{stateAbbr}")]
+    public ActionResult AddNew( string stateAbbr )
     {
+      if ( string.IsNullOrEmpty( stateAbbr ) ) return RedirectToAction( "Index", "Editor" );
       if ( Request.Url == null ) return View( "Current" );
       var urlTest = Request.Url.AbsoluteUri;
-      var widgetVm = new WidgetVm();
-      if ( stateAbbr == null ) return View( widgetVm );
-      widgetVm.State = StatesDictionary.States.FirstOrDefault( s => s.Key == stateAbbr ).Value;
-      widgetVm.StateAbbr = stateAbbr;
-      widgetVm.Sites = ItemsManager.GetSites(stateAbbr, urlTest);
+      var widgetVm = new WidgetVm
+      {
+        State = StatesDictionary.States.FirstOrDefault(s => s.Key == stateAbbr).Value,
+        StateAbbr = stateAbbr,
+        Sites = ItemsManager.GetSites(stateAbbr, urlTest)
+      };
       return View( widgetVm );
     }
 
@@ -101,8 +109,15 @@ namespace CustomWidgetEditor.Controllers
       {
         libraryItem.PlanLibCode = widgetVm.PlanLibCode;
       }
-      ItemsManager.Save( libraryItem, widgetVm.State, urlTest );
+      ItemsManager.Save( libraryItem, widgetVm.State, urlTest, widgetVm.SiteId );
       return RedirectToAction( "Current", "Editor", new { stateAbbr = widgetVm.StateAbbr } );
+    }
+
+    public Dictionary<int, string> GetSites(string stateAbbr)
+    {
+      var urlTest = Request.Url.AbsoluteUri;
+      var sites = ItemsManager.GetSites(stateAbbr, urlTest);
+      return sites;
     }
   }
 }
