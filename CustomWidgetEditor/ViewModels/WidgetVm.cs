@@ -37,8 +37,9 @@ namespace CustomWidgetEditor.ViewModels
     public string StateAbbr { get; set; }
 
     [DisplayName("Site Name")]
-    public int SiteId { get; set; }
+    public int? SiteId { get; set; }
 
+    [DisplayName("Site Name")]
     public string SiteName { get; set; }
 
     public Dictionary<int, string> Sites { get; set; }

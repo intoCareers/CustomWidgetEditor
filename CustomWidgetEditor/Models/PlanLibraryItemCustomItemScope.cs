@@ -1,12 +1,9 @@
 namespace CustomWidgetEditor.Models
 {
-    using System;
-    using System.Collections.Generic;
-    using System.ComponentModel.DataAnnotations;
-    using System.ComponentModel.DataAnnotations.Schema;
-    using System.Data.Entity.Spatial;
+  using System.ComponentModel.DataAnnotations;
+  using System.ComponentModel.DataAnnotations.Schema;
 
-    [Table("PlanLibraryItemCustomItemScope")]
+  [Table("PlanLibraryItemCustomItemScope")]
     public partial class PlanLibraryItemCustomItemScope
     {
         [Key]
@@ -22,6 +19,11 @@ namespace CustomWidgetEditor.Models
         [Column(Order = 2)]
         [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public int ScopeId { get; set; }
+
+        [Key]
+        [Column(Order = 3)]
+        [DatabaseGenerated(DatabaseGeneratedOption.None)]
+        public int OperatorId { get; set; }
 
         public virtual PlanLibraryItem PlanLibraryItem { get; set; }
     }

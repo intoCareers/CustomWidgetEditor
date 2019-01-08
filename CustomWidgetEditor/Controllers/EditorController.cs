@@ -23,24 +23,10 @@ namespace CustomWidgetEditor.Controllers
       if ( Request.Url == null ) return View();
       var urlTest = Request.Url.AbsoluteUri;
       var items = ItemsManager.GetItems( stateAbbr, urlTest );
-      var widgetVm = new List<WidgetVm>();
-      if ( items != null )
-      {
-        widgetVm = items.Select( i => new WidgetVm
-        {
-          PlanLibCode = i.PlanLibCode,
-          ItemTitle = i.ItemTitle,
-          ItemDescription = i.ItemDescription,
-          DefaultThreshold = i.DefaultThreshold,
-          FormId = i.FormID,
-          State = StatesDictionary.States.FirstOrDefault( s => s.Key == stateAbbr ).Value,
-          StateAbbr = stateAbbr,
-        } ).ToList();
-      }
 
       ViewBag.State = StatesDictionary.States.FirstOrDefault( s => s.Key == stateAbbr ).Value;
       ViewBag.StateAbbr = stateAbbr;
-      return View( widgetVm );
+      return View( items );
     }
 
     [Route("Editor/Edit/{id}/{stateAbbr}")]
@@ -49,17 +35,8 @@ namespace CustomWidgetEditor.Controllers
       if ( string.IsNullOrEmpty( stateAbbr ) ) return RedirectToAction( "Index" );
       if ( Request.Url == null ) return View( "Current" );
       var urlTest = Request.Url.AbsoluteUri;
-      var item = ItemsManager.GetItem( stateAbbr, urlTest, id );
-      var widgetVm = new WidgetVm
-      {
-        PlanLibCode = item.PlanLibCode,
-        ItemTitle = item.ItemTitle,
-        ItemDescription = item.ItemDescription,
-        DefaultThreshold = item.DefaultThreshold,
-        FormId = item.FormID,
-        State = StatesDictionary.States.FirstOrDefault( s => s.Key == stateAbbr ).Value,
-        StateAbbr = stateAbbr
-      };
+      var widgetVm = ItemsManager.GetItem( stateAbbr, urlTest, id );
+      widgetVm.State = StatesDictionary.States.FirstOrDefault(s => s.Key == stateAbbr).Value;
       return View( "AddNew", widgetVm );
     }
 
@@ -92,24 +69,16 @@ namespace CustomWidgetEditor.Controllers
           DefaultThreshold = widgetVm.DefaultThreshold,
           FormId = widgetVm.FormId,
           State = widgetVm.State,
-          StateAbbr = widgetVm.StateAbbr
+          StateAbbr = widgetVm.StateAbbr,
+          SiteId = widgetVm.SiteId,
+          SiteName = widgetVm.SiteName
         };
         return View( "AddNew", vm );
       }
       if ( Request.Url == null ) return View( "Current" );
       var urlTest = Request.Url.AbsoluteUri;
-      var libraryItem = new PlanLibraryItem
-      {
-        ItemTitle = widgetVm.ItemTitle,
-        ItemDescription = widgetVm.ItemDescription,
-        DefaultThreshold = widgetVm.DefaultThreshold,
-        FormID = widgetVm.FormId
-      };
-      if ( widgetVm.PlanLibCode != 0 )
-      {
-        libraryItem.PlanLibCode = widgetVm.PlanLibCode;
-      }
-      ItemsManager.Save( libraryItem, widgetVm.State, urlTest, widgetVm.SiteId );
+      
+      ItemsManager.Save( widgetVm, widgetVm.State, urlTest, widgetVm.SiteId );
       return RedirectToAction( "Current", "Editor", new { stateAbbr = widgetVm.StateAbbr } );
     }
 

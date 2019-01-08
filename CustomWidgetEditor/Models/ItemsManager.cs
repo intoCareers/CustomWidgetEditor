@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using CustomWidgetEditor.ViewModels;
 
 namespace CustomWidgetEditor.Models
 {
@@ -12,9 +13,9 @@ namespace CustomWidgetEditor.Models
     private const string _metricValueNote = "Custom";
 
     //Get all items for specific state
-    public static List<PlanLibraryItem> GetItems( string stateAbbr, string urlTest )
+    public static List<WidgetVm> GetItems( string stateAbbr, string urlTest )
     {
-      var items = new List<PlanLibraryItem>();
+      var items = new List<WidgetVm>();
       try
       {
         using ( var context = new LibraryItemsContext( stateAbbr, urlTest ) )
@@ -23,17 +24,35 @@ namespace CustomWidgetEditor.Models
           if ( urlTest.Contains( "localhost" ) || urlTest.Contains( "test" ) )
           {
             items = ( from p in context.PlanLibraryItems
-                      join s in context.PlanLibraryItemCustomItemScopes on p.PlanLibCode equals s.PlanLibCode
-                      join o in context.Operators on s.ScopeId equals o.OperatorID
-                      where p.ItemTypeID == _itemTypeId && o.OperatorID == operatorId
-                      select p ).ToList();
+                .Where( p => p.ItemTypeID == _itemTypeId )
+              from s in context.PlanLibraryItemCustomItemScopes
+                .Where( s => s.PlanLibCode == p.PlanLibCode && s.OperatorId == operatorId )
+              from o in context.Operators
+                .Where( o => o.OperatorID == operatorId )
+              from si in context.Sites
+                .Where( si => si.SiteID == s.ScopeId && si.OperatorID == operatorId )
+                .DefaultIfEmpty()
+              select new WidgetVm()
+              {
+                PlanLibCode = p.PlanLibCode,
+                ItemTitle = p.ItemTitle,
+                ItemDescription = p.ItemDescription,
+                DefaultThreshold = p.DefaultThreshold,
+                FormId = p.FormID,
+                StateAbbr = stateAbbr,
+                SiteId = si.SiteID,
+                SiteName = si.SiteName
+              } ).ToList();
           }
           else
           {
             items = ( from p in context.PlanLibraryItems
                       join s in context.PlanLibraryItemCustomItemScopes on p.PlanLibCode equals s.PlanLibCode
-                      where p.ItemTypeID == _itemTypeId
-                      select p ).ToList();
+                      where p.ItemTypeID == _itemTypeId 
+                      select new WidgetVm()
+                      {
+
+                      } ).ToList();
           }
         }
       }
@@ -46,22 +65,42 @@ namespace CustomWidgetEditor.Models
     }
 
     //Get single PlanLibraryItem
-    public static PlanLibraryItem GetItem( string stateAbbr, string urlTest, int id )
+    public static WidgetVm GetItem( string stateAbbr, string urlTest, int id )
     {
-      var item = new PlanLibraryItem();
+      var widgetVm = new WidgetVm();
       try
       {
-        using ( var context = new LibraryItemsContext( stateAbbr, urlTest ) )
+        using (var context = new LibraryItemsContext(stateAbbr, urlTest))
         {
-          item = context.PlanLibraryItems.FirstOrDefault( i => i.PlanLibCode == id );
+          var operatorId = context.Operators.FirstOrDefault(o => o.StateAbbr == stateAbbr).OperatorID;
+          widgetVm = (from p in context.PlanLibraryItems
+              .Where(p => p.PlanLibCode == id)
+            from s in context.PlanLibraryItemCustomItemScopes
+              .Where(s => s.PlanLibCode == p.PlanLibCode && s.OperatorId == operatorId)
+            from si in context.Sites
+              .Where(si => si.SiteID == s.ScopeId && si.OperatorID == operatorId)
+              .DefaultIfEmpty()
+            select new WidgetVm()
+            {
+              PlanLibCode = p.PlanLibCode,
+              ItemTitle = p.ItemTitle,
+              ItemDescription = p.ItemDescription,
+              DefaultThreshold = p.DefaultThreshold,
+              FormId = p.FormID,
+              StateAbbr = stateAbbr,
+              SiteId = si.SiteID,
+              SiteName = si.SiteName
+            }).FirstOrDefault();
+
         }
       }
-      catch ( Exception ex )
+      catch (Exception ex)
       {
         throw ex;
       }
+   
 
-      return item;
+      return widgetVm;
     }
 
     //get sites for selected State
@@ -83,28 +122,10 @@ namespace CustomWidgetEditor.Models
       return sites;
     }
 
-    //get single site information
-    public static Site GetSite( string stateAbbr, string urlTest, int id )
-    {
-      var site = new Site();
-      try
-      {
-        using ( var context = new LibraryItemsContext( stateAbbr, urlTest ) )
-        {
-          site = context.Sites.FirstOrDefault( s => s.SiteID == id );
-        }
-      }
-      catch ( Exception ex )
-      {
-        throw ex;
-      }
-
-      return site;
-    }
-
     //save single PlanLibraryItem
-    public static void Save( PlanLibraryItem libraryItem, string stateAbbr, string urlTest, int? siteId = null )
+    public static void Save( WidgetVm widgetVm, string stateAbbr, string urlTest, int? siteId = null )
     {
+      var libraryItem = new PlanLibraryItem();
       try
       {
         using ( var context = new LibraryItemsContext( stateAbbr, urlTest ) )

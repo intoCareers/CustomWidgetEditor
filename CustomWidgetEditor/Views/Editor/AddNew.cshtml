@@ -19,7 +19,7 @@ else
   <div class="form-group">
     @if ( Model.StateAbbr == null )
     {
-      @Html.DropDownListFor( model => model.State, new SelectList( StatesDictionary.States, "Key", "Value" ), "Select a state", new { @class = "form-control text-center", @id="states-dropdown" } )
+      @Html.DropDownListFor( model => model.State, new SelectList( StatesDictionary.States, "Key", "Value" ), "Select a state", new { @class = "form-control text-center", @id = "states-dropdown" } )
       @Html.ValidationMessageFor( model => model.State, "State selection is required", new { @class = "text-danger" } )
     }
     else
@@ -33,7 +33,15 @@ else
   {
     <div class="form-group">
       @Html.LabelFor( model => model.SiteId, new { @class = "control-label" } )
-      @Html.DropDownListFor( model => model.SiteId, new SelectList( Model.Sites.Values, Model.Sites.Keys ), "(Optional) Select a site", new { @class = "form-control pl-2", @id="sites-dropdown" } )
+      @Html.DropDownListFor( model => model.SiteId, new SelectList( Model.Sites.Values, Model.Sites.Keys ), "(Optional) Select a site", new { @class = "form-control pl-2", @id = "sites-dropdown" } )
+    </div>
+  }
+  
+  if(!string.IsNullOrEmpty(Model.SiteName))
+  {
+    <div class="form-group">
+      @Html.LabelFor( model => model.SiteName, new { @class = "control-label" } )
+      @Html.TextBoxFor( model => model.SiteName, new { @class = "form-control", @readonly = "readonly", @title = "Field is read only" } )
     </div>
   }
 
