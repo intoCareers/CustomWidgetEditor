@@ -33,7 +33,7 @@ else
   {
     <div class="form-group">
       @Html.LabelFor( model => model.SiteId, new { @class = "control-label" } )
-      @Html.DropDownListFor( model => model.SiteId, new SelectList( Model.Sites.Values, Model.Sites.Keys ), "(Optional) Select a site", new { @class = "form-control pl-2", @id = "sites-dropdown" } )
+      @Html.DropDownListFor( model => model.SiteId, Model.Sites, "(Optional) Select a site", new { @class = "form-control pl-2", @id = "sites-dropdown" } )
     </div>
   }
   

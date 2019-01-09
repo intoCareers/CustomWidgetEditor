@@ -21,6 +21,9 @@ namespace CustomWidgetEditor
       bundles.Add( new ScriptBundle( "~/bundles/AddNewView" ).Include(
         "~/Scripts/AddNewView.js" ) );
 
+      bundles.Add( new ScriptBundle( "~/bundles/Current" ).Include(
+        "~/Scripts/CurrentForms.js" ) );
+
       bundles.Add( new ScriptBundle( "~/bundles/jqueryval" ).Include(
         "~/Scripts/jquery.validate*",
         "~/Scripts/jquery.unobtrusive*" ) );

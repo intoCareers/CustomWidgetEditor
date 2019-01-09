@@ -1,12 +1,13 @@
 ﻿using CustomWidgetEditor.Models;
 using CustomWidgetEditor.ViewModels;
 using System.Collections.Generic;
+using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Web.Mvc;
 
 namespace CustomWidgetEditor.Controllers
 {
-  [RoutePrefix("Editor")]
+  [RoutePrefix( "Editor" )]
   public class EditorController : Controller
   {
     // GET: Editor
@@ -16,7 +17,7 @@ namespace CustomWidgetEditor.Controllers
     }
 
     [HttpGet]
-    [Route("Editor/Current/{stateAbbr}")]
+    [Route( "Editor/Current/{stateAbbr}" )]
     public ActionResult Current( string stateAbbr )
     {
       if ( string.IsNullOrEmpty( stateAbbr ) ) return RedirectToAction( "Index" );
@@ -29,14 +30,14 @@ namespace CustomWidgetEditor.Controllers
       return View( items );
     }
 
-    [Route("Editor/Edit/{id}/{stateAbbr}")]
+    [Route( "Editor/Edit/{id}/{stateAbbr}" )]
     public ActionResult Edit( int id, string stateAbbr )
     {
       if ( string.IsNullOrEmpty( stateAbbr ) ) return RedirectToAction( "Index" );
       if ( Request.Url == null ) return View( "Current" );
       var urlTest = Request.Url.AbsoluteUri;
       var widgetVm = ItemsManager.GetItem( stateAbbr, urlTest, id );
-      widgetVm.State = StatesDictionary.States.FirstOrDefault(s => s.Key == stateAbbr).Value;
+      widgetVm.State = StatesDictionary.States.FirstOrDefault( s => s.Key == stateAbbr ).Value;
       return View( "AddNew", widgetVm );
     }
 
@@ -48,9 +49,9 @@ namespace CustomWidgetEditor.Controllers
       var urlTest = Request.Url.AbsoluteUri;
       var widgetVm = new WidgetVm
       {
-        State = StatesDictionary.States.FirstOrDefault(s => s.Key == stateAbbr).Value,
+        State = StatesDictionary.States.FirstOrDefault( s => s.Key == stateAbbr ).Value,
         StateAbbr = stateAbbr,
-        Sites = ItemsManager.GetSites(stateAbbr, urlTest)
+        Sites = ItemsManager.GetSites( stateAbbr, urlTest )
       };
       return View( widgetVm );
     }
@@ -77,16 +78,17 @@ namespace CustomWidgetEditor.Controllers
       }
       if ( Request.Url == null ) return View( "Current" );
       var urlTest = Request.Url.AbsoluteUri;
-      
-      ItemsManager.Save( widgetVm, widgetVm.State, urlTest, widgetVm.SiteId );
+
+      ItemsManager.Save( widgetVm, widgetVm.StateAbbr, urlTest, widgetVm.SiteId );
       return RedirectToAction( "Current", "Editor", new { stateAbbr = widgetVm.StateAbbr } );
     }
 
-    public Dictionary<int, string> GetSites(string stateAbbr)
+    [HttpDelete]
+    [Route( "Editor/Delete" )]
+    public void Delete( int id, string stateAbbr )
     {
       var urlTest = Request.Url.AbsoluteUri;
-      var sites = ItemsManager.GetSites(stateAbbr, urlTest);
-      return sites;
+      ItemsManager.Delete( stateAbbr, urlTest, id );
     }
   }
 }

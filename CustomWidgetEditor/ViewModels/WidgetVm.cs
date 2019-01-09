@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel;
+using System.Web.Mvc;
 using CustomWidgetEditor.Models;
 
 namespace CustomWidgetEditor.ViewModels
@@ -42,6 +43,6 @@ namespace CustomWidgetEditor.ViewModels
     [DisplayName("Site Name")]
     public string SiteName { get; set; }
 
-    public Dictionary<int, string> Sites { get; set; }
+    public List<SelectListItem> Sites { get; set; }
   }
 }

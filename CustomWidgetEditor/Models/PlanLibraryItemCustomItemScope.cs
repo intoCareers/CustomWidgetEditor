@@ -18,7 +18,7 @@ namespace CustomWidgetEditor.Models
         [Key]
         [Column(Order = 2)]
         [DatabaseGenerated(DatabaseGeneratedOption.None)]
-        public int ScopeId { get; set; }
+        public int? ScopeId { get; set; }
 
         [Key]
         [Column(Order = 3)]

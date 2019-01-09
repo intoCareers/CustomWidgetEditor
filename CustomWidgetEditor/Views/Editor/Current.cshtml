@@ -22,6 +22,7 @@ else
         <th>Default Metric</th>
         <th>Form Id</th>
         <th>Site</th>
+        <th></th>
       </tr>
     </thead>
     <tbody>
@@ -50,8 +51,12 @@ else
               <span>All</span>
             }
           </td>
+          <td>
+            <button type="button" class="btn-link js-delete" data-id="@widget.PlanLibCode">Delete</button>
+          </td>
         </tr>
       }
     </tbody>
   </table>
 }
+@Scripts.Render( "~/bundles/Current" )
