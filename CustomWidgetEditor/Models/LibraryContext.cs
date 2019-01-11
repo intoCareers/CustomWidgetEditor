@@ -1,14 +1,19 @@
+
 namespace CustomWidgetEditor.Models
 {
-  using System.Data.Entity;
+  using System;
   using System.Configuration;
+  using System.Data.Entity;
+  using System.ComponentModel.DataAnnotations.Schema;
+  using System.Linq;
+
   public partial class LibraryItemsContext : DbContext
   {
     public LibraryItemsContext( string stateAbbr, string urlTest )
     {
       string dbName;
       var connString = ConfigurationManager.ConnectionStrings["LibraryItemsContext"].ConnectionString;
-      if ( urlTest.ToLower().Contains( "test" ) )
+      if ( urlTest.ToLower().Contains( "test" ) || urlTest.ToLower().Contains( "temp" ) )
       {
         dbName = "CisMain";
       }
@@ -20,7 +25,7 @@ namespace CustomWidgetEditor.Models
         }
         else
         {
-          dbName = stateAbbr == "IC" ? "CisMain" : "CisMain_" + stateAbbr;
+          dbName = string.IsNullOrEmpty(stateAbbr)? "CisMain" : "CisMain_" + stateAbbr;
         }
       }
       Database.Connection.ConnectionString = connString.Replace( "_dbName_", dbName );
@@ -28,9 +33,8 @@ namespace CustomWidgetEditor.Models
 
     public virtual DbSet<Operator> Operators { get; set; }
     public virtual DbSet<PlanLibraryItem> PlanLibraryItems { get; set; }
-    public virtual DbSet<PlanLibraryItemsScope> PlanLibraryItemsScopes { get; set; }
     public virtual DbSet<Site> Sites { get; set; }
-    public virtual DbSet<PlanLibraryItemCustomItemScope> PlanLibraryItemCustomItemScopes { get; set; }
+    public virtual DbSet<PlanLibraryItemsCustomItemScope> PlanLibraryItemsCustomItemScopes { get; set; }
 
     protected override void OnModelCreating( DbModelBuilder modelBuilder )
     {
@@ -53,8 +57,14 @@ namespace CustomWidgetEditor.Models
           .WillCascadeOnDelete( false );
 
       modelBuilder.Entity<PlanLibraryItem>()
-          .HasMany( e => e.PlanLibraryItemCustomItemScopes )
+          .HasMany( e => e.PlanLibraryItemsCustomItemScopes )
           .WithRequired( e => e.PlanLibraryItem )
+          .HasForeignKey( e => e.PlanLibCode );
+
+      modelBuilder.Entity<PlanLibraryItem>()
+          .HasMany( e => e.PlanLibraryItemsCustomItemScopes1 )
+          .WithRequired( e => e.PlanLibraryItem1 )
+          .HasForeignKey( e => e.PlanLibCode )
           .WillCascadeOnDelete( false );
 
       modelBuilder.Entity<Site>()

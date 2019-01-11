@@ -22,39 +22,26 @@ namespace CustomWidgetEditor.Models
         using ( var context = new LibraryItemsContext( stateAbbr, urlTest ) )
         {
           var operatorId = context.Operators.FirstOrDefault( o => o.StateAbbr == stateAbbr ).OperatorID;
-          if ( urlTest.Contains( "localhost" ) || urlTest.Contains( "test" ) )
-          {
-            items = ( from p in context.PlanLibraryItems
-                .Where( p => p.ItemTypeID == _itemTypeId )
-                      from s in context.PlanLibraryItemCustomItemScopes
-                        .Where( s => s.PlanLibCode == p.PlanLibCode && s.OperatorId == operatorId )
-                      from o in context.Operators
-                        .Where( o => o.OperatorID == operatorId )
-                      from si in context.Sites
-                        .Where( si => si.SiteID == s.ScopeId && si.OperatorID == operatorId )
-                        .DefaultIfEmpty()
-                      select new WidgetVm()
-                      {
-                        PlanLibCode = p.PlanLibCode,
-                        ItemTitle = p.ItemTitle,
-                        ItemDescription = p.ItemDescription,
-                        DefaultThreshold = p.DefaultThreshold,
-                        FormId = p.FormID,
-                        StateAbbr = stateAbbr,
-                        SiteId = si.SiteID,
-                        SiteName = si.SiteName
-                      } ).ToList();
-          }
-          else
-          {
-            items = ( from p in context.PlanLibraryItems
-                      join s in context.PlanLibraryItemCustomItemScopes on p.PlanLibCode equals s.PlanLibCode
-                      where p.ItemTypeID == _itemTypeId
-                      select new WidgetVm()
-                      {
-
-                      } ).ToList();
-          }
+          items = ( from p in context.PlanLibraryItems
+              .Where( p => p.ItemTypeID == _itemTypeId )
+                    from s in context.PlanLibraryItemsCustomItemScopes
+                      .Where( s => s.PlanLibCode == p.PlanLibCode && s.OperatorId == operatorId )
+                    from o in context.Operators
+                      .Where( o => o.OperatorID == operatorId )
+                    from si in context.Sites
+                      .Where( si => si.SiteID == s.SiteId && si.OperatorID == operatorId )
+                      .DefaultIfEmpty()
+                    select new WidgetVm()
+                    {
+                      PlanLibCode = p.PlanLibCode,
+                      ItemTitle = p.ItemTitle,
+                      ItemDescription = p.ItemDescription,
+                      DefaultThreshold = p.DefaultThreshold,
+                      FormId = p.FormID,
+                      StateAbbr = stateAbbr,
+                      SiteId = si.SiteID,
+                      SiteName = si.SiteName
+                    } ).ToList();
         }
       }
       catch ( Exception ex )
@@ -76,10 +63,10 @@ namespace CustomWidgetEditor.Models
           var operatorId = context.Operators.FirstOrDefault( o => o.StateAbbr == stateAbbr ).OperatorID;
           widgetVm = ( from p in context.PlanLibraryItems
                .Where( p => p.PlanLibCode == id )
-                       from s in context.PlanLibraryItemCustomItemScopes
+                       from s in context.PlanLibraryItemsCustomItemScopes
                          .Where( s => s.PlanLibCode == p.PlanLibCode && s.OperatorId == operatorId )
                        from si in context.Sites
-                         .Where( si => si.SiteID == s.ScopeId && si.OperatorID == operatorId )
+                         .Where( si => si.SiteID == s.SiteId && si.OperatorID == operatorId )
                          .DefaultIfEmpty()
                        select new WidgetVm()
                        {
@@ -134,26 +121,40 @@ namespace CustomWidgetEditor.Models
     //save single PlanLibraryItem
     public static void Save( WidgetVm widgetVm, string stateAbbr, string urlTest, int? siteId = null )
     {
-
       try
       {
         using ( var context = new LibraryItemsContext( stateAbbr, urlTest ) )
         {
-          var libraryItem = new PlanLibraryItem
+          var libraryItem = new PlanLibraryItem();
+          if ( widgetVm.PlanLibCode == 0 )
           {
-            ItemType = _itemType,
-            ItemTypeID = _itemTypeId,
-            ItemTitle = widgetVm.ItemTitle,
-            ItemDescription = widgetVm.ItemDescription,
-            DefaultThreshold = widgetVm.DefaultThreshold,
-            MetricValueNote = _metricValueNote,
-            PlanLibraryItemScopeID = _itemScopeId,
-            FormID = widgetVm.FormId
-          };
-          context.PlanLibraryItems.Add( libraryItem );
+
+            libraryItem = new PlanLibraryItem
+            {
+              ItemType = _itemType,
+              ItemTypeID = _itemTypeId,
+              ItemTitle = widgetVm.ItemTitle,
+              ItemDescription = widgetVm.ItemDescription,
+              DefaultThreshold = widgetVm.DefaultThreshold,
+              MetricValueNote = _metricValueNote,
+              PlanLibraryItemScopeID = _itemScopeId,
+              FormID = widgetVm.FormId
+            };
+            context.PlanLibraryItems.Add( libraryItem );
+          }
+          else
+          {
+            libraryItem = context.PlanLibraryItems.FirstOrDefault( i => i.PlanLibCode == widgetVm.PlanLibCode );
+            if ( libraryItem == null ) return;
+            libraryItem.ItemTitle = widgetVm.ItemTitle;
+            libraryItem.ItemDescription = widgetVm.ItemDescription;
+            libraryItem.DefaultThreshold = widgetVm.DefaultThreshold;
+            libraryItem.FormID = widgetVm.FormId;
+          }
 
           context.SaveChanges();
 
+          if ( widgetVm.PlanLibCode != 0 ) return;
           var operatorId = context.Operators.FirstOrDefault( o => o.StateAbbr == stateAbbr ).OperatorID;
           var scopeId = siteId;
           SaveCustomItemScope( libraryItem.PlanLibCode, scopeId, operatorId, context );
@@ -166,33 +167,33 @@ namespace CustomWidgetEditor.Models
     }
 
     //save entry to PlanLibraryItemsCustomItemScope
-    public static void SaveCustomItemScope( int itemId, int? scopeId, int operatorId, LibraryItemsContext context  )
+    public static void SaveCustomItemScope( int itemId, int? scopeId, int operatorId, LibraryItemsContext context )
     {
       using ( context )
       {
-        var customItemScopeEntry = new PlanLibraryItemCustomItemScope
+        var customItemScopeEntry = new PlanLibraryItemsCustomItemScope
         {
           PlanLibCode = itemId,
-          ScopeId = scopeId,
+          SiteId = scopeId,
           OperatorId = operatorId
         };
-        context.PlanLibraryItemCustomItemScopes.Add( customItemScopeEntry );
+        context.PlanLibraryItemsCustomItemScopes.Add( customItemScopeEntry );
         context.SaveChanges();
       }
     }
 
-    public static void Delete(string stateAbbr, string urlTest, int id)
+    public static void Delete( string stateAbbr, string urlTest, int id )
     {
       try
       {
-        using (var context = new LibraryItemsContext(stateAbbr, urlTest))
+        using ( var context = new LibraryItemsContext( stateAbbr, urlTest ) )
         {
-          var formInDb = context.PlanLibraryItems.FirstOrDefault(i => i.PlanLibCode == id);
-          context.PlanLibraryItems.Remove(formInDb);
+          var formInDb = context.PlanLibraryItems.FirstOrDefault( i => i.PlanLibCode == id );
+          context.PlanLibraryItems.Remove( formInDb );
           context.SaveChanges();
         }
       }
-      catch (Exception ex)
+      catch ( Exception ex )
       {
         throw ex;
       }

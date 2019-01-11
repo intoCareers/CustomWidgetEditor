@@ -7,9 +7,10 @@ using System.Web.Mvc;
 
 namespace CustomWidgetEditor.Controllers
 {
-  [RoutePrefix( "Editor" )]
+  [RoutePrefix("Editor")]
   public class EditorController : Controller
   {
+    [HttpGet]
     // GET: Editor
     public ActionResult Index()
     {

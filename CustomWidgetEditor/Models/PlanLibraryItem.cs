@@ -1,14 +1,18 @@
 namespace CustomWidgetEditor.Models
 {
-  using System.Collections.Generic;
-  using System.ComponentModel.DataAnnotations;
+    using System;
+    using System.Collections.Generic;
+    using System.ComponentModel.DataAnnotations;
+    using System.ComponentModel.DataAnnotations.Schema;
+    using System.Data.Entity.Spatial;
 
-  public partial class PlanLibraryItem
+    public partial class PlanLibraryItem
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public PlanLibraryItem()
         {
-            PlanLibraryItemCustomItemScopes = new HashSet<PlanLibraryItemCustomItemScope>();
+            PlanLibraryItemsCustomItemScopes = new HashSet<PlanLibraryItemsCustomItemScope>();
+            PlanLibraryItemsCustomItemScopes1 = new HashSet<PlanLibraryItemsCustomItemScope>();
         }
 
         [Key]
@@ -30,9 +34,6 @@ namespace CustomWidgetEditor.Models
 
         public int DefaultThreshold { get; set; }
 
-        [StringLength(255)]
-        public string ItemTypeNote { get; set; }
-
         [StringLength(50)]
         public string MetricValueNote { get; set; }
 
@@ -45,9 +46,13 @@ namespace CustomWidgetEditor.Models
         [StringLength(50)]
         public string FormID { get; set; }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<PlanLibraryItemCustomItemScope> PlanLibraryItemCustomItemScopes { get; set; }
+        [StringLength(255)]
+        public string ItemTypeNote { get; set; }
 
-        public virtual PlanLibraryItemsScope PlanLibraryItemsScope { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<PlanLibraryItemsCustomItemScope> PlanLibraryItemsCustomItemScopes { get; set; }
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<PlanLibraryItemsCustomItemScope> PlanLibraryItemsCustomItemScopes1 { get; set; }
     }
 }
