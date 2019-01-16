@@ -2,31 +2,16 @@
 @using CustomWidgetEditor.Models
 
 @{
-  ViewBag.Title = "Details";
   Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-@if ( Model.PlanLibCode == 0 )
-{
-  <h2>Add Custom Widgets to Database</h2>
-}
-else
-{
-  <h2>Edit</h2>
-}
+<h2>@ViewBag.Title</h2>
+
 @using ( Html.BeginForm( "Save", "Editor", FormMethod.Post, new { id = "save" } ) )
 {
   <div class="form-group">
-    @if ( Model.StateAbbr == null )
-    {
-      @Html.DropDownListFor( model => model.State, new SelectList( StatesDictionary.States, "Key", "Value" ), "Select a state", new { @class = "form-control text-center", @id = "states-dropdown" } )
-      @Html.ValidationMessageFor( model => model.State, "State selection is required", new { @class = "text-danger" } )
-    }
-    else
-    {
       @Html.LabelFor( model => model.State, new { @class = "control-label" } )
       @Html.TextBoxFor( model => model.State, new { @class = "form-control", @readonly = "readonly", @title = "Field is read only" } )
-    }
   </div>
 
   if ( Model.PlanLibCode == 0 )

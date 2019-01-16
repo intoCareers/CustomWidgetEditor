@@ -1,0 +1,21 @@
+﻿@using CustomWidgetEditor.Models
+@model CustomWidgetEditor.ViewModels.CopyVm
+
+<h2>Select the state to copy the form</h2>
+
+@using ( Html.BeginForm( "Copy", "Editor", new { id = Model.PlanLibCode, oldStateAbbr = Model.OldStateAbbr, stateAbbr = Model.StateAbbr, FormMethod.Post } ) )
+{
+  <div class="form-group">
+    @Html.LabelFor( model => model.CurrentState, new { @class = "control-label" } )
+    @Html.TextBoxFor( model => model.CurrentState, new { @class = "form-control", @readonly = "readonly" } )
+  </div>
+  <div class="form-group">
+    <label>Copy to</label>
+    @Html.DropDownListFor( model => model.StateAbbr, new SelectList( StatesDictionary.States, "Key", "Value" ), "Select a state", new { @class = "form-control", @id = "states-dropdown", @title = "Select same state to copy to another site", @name = "states-dropdown" } )
+    @Html.ValidationMessageFor( model => model.StateAbbr, "State selection is required", new { @class = "text-danger" } )
+  </div>
+
+  <button type="submit" class="btn btn-outline-success mr-5">Copy</button>
+  <button type="button" class="btn btn-outline-danger" data-dismiss="modal">Cancel</button>
+}
+@Scripts.Render( "~/bundles/jqueryval" )
