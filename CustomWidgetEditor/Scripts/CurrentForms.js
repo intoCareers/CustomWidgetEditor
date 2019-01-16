@@ -23,7 +23,15 @@
           }
         });
     });
+  $("#current-modal").on("show.bs.modal",
+    function (event) {
+      var button = $(event.relatedTarget);
+      var url = globals[0].statesDropDown + "/" + button.data("id") + "?stateAbbr=" + button.data("stateabbr");
+      var modal = $(this);
+      modal.find(".modal-body").hide().load(url).fadeIn("slow");
+    });
 });
+
 // Read a page's GET URL variables and return them as an associative array.
 function getUrlVars() {
   var vars = [], hash;

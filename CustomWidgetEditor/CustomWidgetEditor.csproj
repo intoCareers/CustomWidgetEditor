@@ -157,6 +157,7 @@
     <Compile Include="Models\Site.cs" />
     <Compile Include="Models\StatesDictionary.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ViewModels\CopyVm.cs" />
     <Compile Include="ViewModels\WidgetVm.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -464,6 +465,7 @@
     <Content Include="Scripts\popper.js.map" />
     <Content Include="Scripts\popper-utils.min.js.map" />
     <Content Include="Scripts\popper-utils.js.map" />
+    <Content Include="Views\Editor\StatesDropDown.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

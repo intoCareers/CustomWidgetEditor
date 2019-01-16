@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Web.Mvc;
 using CustomWidgetEditor.ViewModels;
 
@@ -79,7 +80,6 @@ namespace CustomWidgetEditor.Models
                          SiteId = si.SiteID,
                          SiteName = si.SiteName
                        } ).FirstOrDefault();
-
         }
       }
       catch ( Exception ex )
@@ -87,7 +87,7 @@ namespace CustomWidgetEditor.Models
         throw ex;
       }
 
-
+      widgetVm.State = StatesDictionary.States.FirstOrDefault(x => x.Key == stateAbbr).Value;
       return widgetVm;
     }
 
