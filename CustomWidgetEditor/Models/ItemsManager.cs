@@ -171,7 +171,7 @@ namespace CustomWidgetEditor.Models
     {
       using ( context )
       {
-        var customItemScopeEntry = new PlanLibraryItemsCustomItemScope
+        var customItemScopeEntry = new PlanLibraryItemsCustomFormScope
         {
           PlanLibCode = itemId,
           SiteId = scopeId,

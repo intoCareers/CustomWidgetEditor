@@ -153,7 +153,7 @@
     <Compile Include="Models\LibraryContext.cs" />
     <Compile Include="Models\Operator.cs" />
     <Compile Include="Models\PlanLibraryItem.cs" />
-    <Compile Include="Models\PlanLibraryItemsCustomItemScope.cs" />
+    <Compile Include="Models\PlanLibraryItemsCustomFormScope.cs" />
     <Compile Include="Models\Site.cs" />
     <Compile Include="Models\StatesDictionary.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

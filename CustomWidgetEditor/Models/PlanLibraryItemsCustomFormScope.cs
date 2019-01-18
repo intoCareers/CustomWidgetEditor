@@ -6,8 +6,8 @@ namespace CustomWidgetEditor.Models
     using System.ComponentModel.DataAnnotations.Schema;
     using System.Data.Entity.Spatial;
 
-    [Table("PlanLibraryItemsCustomItemScope")]
-    public partial class PlanLibraryItemsCustomItemScope
+    [Table("PlanLibraryItemsCustomFormScope")]
+    public partial class PlanLibraryItemsCustomFormScope
     {
         [Key]
         [Column(Order = 0)]

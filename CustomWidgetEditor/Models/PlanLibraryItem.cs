@@ -11,8 +11,8 @@ namespace CustomWidgetEditor.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public PlanLibraryItem()
         {
-            PlanLibraryItemsCustomItemScopes = new HashSet<PlanLibraryItemsCustomItemScope>();
-            PlanLibraryItemsCustomItemScopes1 = new HashSet<PlanLibraryItemsCustomItemScope>();
+            PlanLibraryItemsCustomItemScopes = new HashSet<PlanLibraryItemsCustomFormScope>();
+            PlanLibraryItemsCustomItemScopes1 = new HashSet<PlanLibraryItemsCustomFormScope>();
         }
 
         [Key]
@@ -50,9 +50,9 @@ namespace CustomWidgetEditor.Models
         public string ItemTypeNote { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<PlanLibraryItemsCustomItemScope> PlanLibraryItemsCustomItemScopes { get; set; }
+        public virtual ICollection<PlanLibraryItemsCustomFormScope> PlanLibraryItemsCustomItemScopes { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<PlanLibraryItemsCustomItemScope> PlanLibraryItemsCustomItemScopes1 { get; set; }
+        public virtual ICollection<PlanLibraryItemsCustomFormScope> PlanLibraryItemsCustomItemScopes1 { get; set; }
     }
 }

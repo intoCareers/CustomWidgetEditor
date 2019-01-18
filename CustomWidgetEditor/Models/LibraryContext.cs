@@ -34,7 +34,7 @@ namespace CustomWidgetEditor.Models
     public virtual DbSet<Operator> Operators { get; set; }
     public virtual DbSet<PlanLibraryItem> PlanLibraryItems { get; set; }
     public virtual DbSet<Site> Sites { get; set; }
-    public virtual DbSet<PlanLibraryItemsCustomItemScope> PlanLibraryItemsCustomItemScopes { get; set; }
+    public virtual DbSet<PlanLibraryItemsCustomFormScope> PlanLibraryItemsCustomItemScopes { get; set; }
 
     protected override void OnModelCreating( DbModelBuilder modelBuilder )
     {
