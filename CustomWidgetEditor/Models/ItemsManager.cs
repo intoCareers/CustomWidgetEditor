@@ -25,7 +25,7 @@ namespace CustomWidgetEditor.Models
           var operatorId = context.Operators.FirstOrDefault( o => o.StateAbbr == stateAbbr ).OperatorID;
           items = ( from p in context.PlanLibraryItems
               .Where( p => p.ItemTypeID == _itemTypeId )
-                    from s in context.PlanLibraryItemsCustomItemScopes
+                    from s in context.PlanLibraryItemsCustomFormScopes
                       .Where( s => s.PlanLibCode == p.PlanLibCode && s.OperatorId == operatorId )
                     from o in context.Operators
                       .Where( o => o.OperatorID == operatorId )
@@ -64,7 +64,7 @@ namespace CustomWidgetEditor.Models
           var operatorId = context.Operators.FirstOrDefault( o => o.StateAbbr == stateAbbr ).OperatorID;
           widgetVm = ( from p in context.PlanLibraryItems
                .Where( p => p.PlanLibCode == id )
-                       from s in context.PlanLibraryItemsCustomItemScopes
+                       from s in context.PlanLibraryItemsCustomFormScopes
                          .Where( s => s.PlanLibCode == p.PlanLibCode && s.OperatorId == operatorId )
                        from si in context.Sites
                          .Where( si => si.SiteID == s.SiteId && si.OperatorID == operatorId )
@@ -177,7 +177,7 @@ namespace CustomWidgetEditor.Models
           SiteId = scopeId,
           OperatorId = operatorId
         };
-        context.PlanLibraryItemsCustomItemScopes.Add( customItemScopeEntry );
+        context.PlanLibraryItemsCustomFormScopes.Add( customItemScopeEntry );
         context.SaveChanges();
       }
     }
